@@ -34,6 +34,7 @@ namespace Malicious_Middleware_Component
 
             //Get incoming request
             var request = await GetRequestAsTextAsync(context.Request);
+
             //Log it
             _logger.LogInformation(request);
 
